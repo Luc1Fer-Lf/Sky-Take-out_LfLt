@@ -78,13 +78,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         //1、补充缺失的属性值
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));//设置默认密码并进行md5加密
         employee.setStatus(StatusConstant.ENABLE); // 设置账号状态为启用
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         //获取token并解析token拿到员工ID
-        if(employee.getCreateUser() == null) {
-            employee.setCreateUser(BaseContext.getCurrentId());//如果创建用户为空，则设置当前用户为创建用户
-        }
-        employee.setUpdateUser(BaseContext.getCurrentId());//更新当前操作用户
+//        if(employee.getCreateUser() == null) {
+//            employee.setCreateUser(BaseContext.getCurrentId());//如果创建用户为空，则设置当前用户为创建用户
+//        }
+//        employee.setUpdateUser(BaseContext.getCurrentId());//更新当前操作用户
         //2、调用Mapper的新增方法，将员工的数据保存到数据库中
         employeeMapper.insert(employee);
     }
@@ -114,8 +114,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
+//                .updateTime(LocalDateTime.now())
+//                .updateUser(BaseContext.getCurrentId())
                 .build();
         employeeMapper.update(employee); // 调用Mapper的更新方法，传入employee对象，更新员工账号状态
     }
@@ -139,8 +139,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         //属性拷贝
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDTO, employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
     }
 
