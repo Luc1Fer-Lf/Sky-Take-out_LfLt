@@ -1,7 +1,10 @@
 package com.sky.dto;
 
 import com.sky.entity.SetmealDish;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ public class SetmealDTO implements Serializable {
 
     //图片
     private String image;
+
 
     //套餐菜品关系
     private List<SetmealDish> setmealDishes = new ArrayList<>();

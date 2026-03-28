@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+<!--批量插入套餐和菜品关系数据-->
+    <insert id="addSetmealDish">
+        INSERT INTO setmeal_dish (setmeal_id, dish_id, name, price, copies ) VALUES
+        <foreach collection="setmealDishes" item="setmealDish" separator=",">
+            (#{setmealDish.setmealId}, #{setmealDish.dishId}, #{setmealDish.name}, #{setmealDish.price},#{setmealDish.copies})
+        </foreach>
+    </insert>
+    <update id="update">
+        UPDATE setmeal
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--批量删除套餐数据-->
+    <delete id="delete">
+        DELETE FROM setmeal WHERE id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--删除关联套餐的菜品联系信息-->
+    <delete id="deleteSetmealDish">
+        DELETE FROM setmeal_dish WHERE setmeal_id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--分页查询套餐信息-->
+    <select id="pageQuerySetmeal" resultType="com.sky.vo.SetmealVO">
+        SELECT
+            s.id,
+            s.category_id,
+            s.name,
+            s.price,
+            s.status,
+            s.description,
+            s.image,
+            s.update_time,
+            c.name AS categoryName
+        FROM
+            setmeal s
+            LEFT JOIN category c ON s.category_id = c.id
+        WHERE 1=1
+        <if test="categoryId != null">AND s.category_id = #{categoryId}</if>
+        <if test="status != null">AND s.status = #{status}</if>
+        <if test="name != null">AND s.name LIKE '%${name}%'</if>
+        ORDER BY s.update_time DESC
+    </select>
+<!--批量查询套餐数据-->
+    <select id="getByIds" resultType="com.sky.entity.Setmeal">
+        SELECT * FROM setmeal WHERE id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+<!--根据ID查套餐菜品-->
+    <select id="getSetmealDishBySetmealId" resultType="com.sky.entity.SetmealDish">
+        SELECT * FROM setmeal_dish WHERE setmeal_id = #{setmealId}
+    </select>
+
+<!--查询套餐菜品停售数量-->
+    <select id="getSetmealDishCountBySetmealId" resultType="java.lang.Integer">
+     SELECT COUNT(*) FROM setmeal_dish LEFT JOIN dish ON setmeal_dish.setmeal_id = #{id} AND setmeal_dish.dish_id = dish.id
+     WHERE dish.status = 0
+    </select>
+</mapper>

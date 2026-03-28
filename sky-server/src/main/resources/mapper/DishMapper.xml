@@ -53,5 +53,8 @@
         </if>
         ORDER BY d.update_time DESC
     </select>
+    <select id="list" resultType="com.sky.entity.Dish">
+        SELECT * FROM dish WHERE category_id = #{categoryId}
+    </select>
 
 </mapper>
