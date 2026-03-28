@@ -13,6 +13,12 @@ spring:
       username: ${sky.datasource.username}
       password: ${sky.datasource.password}
 
+spring.redis :
+    database: ${sky.redis.database}
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password: ${sky.redis.password}
+
 mybatis:
   #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
