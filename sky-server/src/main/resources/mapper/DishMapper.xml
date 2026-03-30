@@ -42,19 +42,29 @@
         FROM dish d
         LEFT JOIN category c ON d.category_id = c.id
         where 1=1
-        <if test="name != null">
-            AND d.name LIKE CONCAT('%',#{name},'%')
-        </if>
-        <if test="categoryId != null">
-            AND d.category_id = #{categoryId}
-        </if>
-        <if test="status != null">
-            AND d.status = #{status}
-        </if>
+        <if test="name != null">AND d.name LIKE CONCAT('%',#{name},'%')</if>
+        <if test="categoryId != null">AND d.category_id = #{categoryId}</if>
+        <if test="status != null">AND d.status = #{status}</if>
         ORDER BY d.update_time DESC
     </select>
+
+    <!--根据分类id查询菜品数据-->
     <select id="list" resultType="com.sky.entity.Dish">
-        SELECT * FROM dish WHERE category_id = #{categoryId}
+        SELECT * FROM dish
+        <where >
+            <if test="categoryId != null">category_id = #{categoryId}</if>
+            <if test="name != null">AND name LIKE CONCAT('%',#{name},'%')</if>
+        </where>
+    </select>
+
+
+<!--根据id查询菜品数据-->
+    <select id="listById" resultType="com.sky.entity.Dish">
+        SELECT * FROM dish
+        <where >
+            <if test="categoryId != null">category_id = #{categoryId}</if>
+            <if test="status != null">AND status = #{status}</if>
+        </where>
     </select>
 
 </mapper>

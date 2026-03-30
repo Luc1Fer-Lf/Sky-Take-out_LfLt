@@ -78,4 +78,14 @@
      SELECT COUNT(*) FROM setmeal_dish LEFT JOIN dish ON setmeal_dish.setmeal_id = #{id} AND setmeal_dish.dish_id = dish.id
      WHERE dish.status = 0
     </select>
+
+<!--查询套餐信息-->
+    <select id="list" parameterType="Setmeal" resultType="Setmeal">
+        select * from setmeal
+        <where>
+            <if test="name != null"> and name like concat('%',#{name},'%') </if>
+            <if test="categoryId != null"> and category_id = #{categoryId} </if>
+            <if test="status != null"> and status = #{status} </if>
+        </where>
+    </select>
 </mapper>

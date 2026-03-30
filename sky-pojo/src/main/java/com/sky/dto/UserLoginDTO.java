@@ -10,6 +10,6 @@ import java.io.Serializable;
 @Data
 public class UserLoginDTO implements Serializable {
 
-    private String code;
+    private String code;//微信登录成功后，微信会返回一个code,只能使用一次
 
 }
