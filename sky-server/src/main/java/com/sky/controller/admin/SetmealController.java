@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class SetmealController {
      * 新增套餐
      * @param setmealDTO
      */
+    @CacheEvict(value = "setmealCache", key = "#setmealDTO.categoryId")//清理指定分类上的缓存
     @ApiOperation("新增套餐")
     @PostMapping
     public Result save(@RequestBody SetmealDTO setmealDTO){
@@ -53,6 +55,7 @@ public class SetmealController {
      * 批量删除
      * @param ids
      */
+    @CacheEvict(value = "setmealCache", allEntries = true)//清除全部缓存
     @ApiOperation("批量删除")
     @DeleteMapping
     public Result delete(@RequestParam List<Long> ids){
@@ -78,6 +81,7 @@ public class SetmealController {
      * 修改套餐
      * @param setmealDTO
      */
+    @CacheEvict(value = "setmealCache", allEntries = true )//清除全部缓存
     @ApiOperation("修改套餐")
     @PutMapping
     public Result update(@RequestBody SetmealDTO setmealDTO){
@@ -90,6 +94,7 @@ public class SetmealController {
      * 起售、停售
      *
      */
+    @CacheEvict(value = "setmealCache", allEntries = true )//清除全部缓存
     @ApiOperation("起售、停售")
     @PostMapping("/status/{status}")
     public Result startOrStop(@PathVariable Integer status, Long id){

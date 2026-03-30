@@ -55,12 +55,15 @@ public class DishServiceImpl implements DishService {
         dishMapper.addDish(dish);
         // 保存菜品口味数据
         log.info("保存菜品口味数据：{}", dishDTO.getFlavors());
+        //如果没有菜品口味数据，则直接返回
         // 遍历菜品口味数据，设置dishId并保存
         List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && flavors.size() > 0) {
         for (DishFlavor flavor : flavors) {
             flavor.setDishId(dish.getId());
         }
         dishFlavorMapper.addDishFlavor(flavors);
+        }
     }
 
     /**
