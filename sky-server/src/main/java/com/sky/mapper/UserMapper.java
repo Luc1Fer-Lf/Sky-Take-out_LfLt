@@ -1,8 +1,6 @@
 package com.sky.mapper;
 
-import com.sky.anno.AutoFill;
 import com.sky.entity.User;
-import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -13,6 +11,7 @@ public interface UserMapper {
 
     /**
      * 根据openid查询用户
+     *
      * @param openid
      * @return
      */
@@ -21,9 +20,19 @@ public interface UserMapper {
 
     /**
      * 插入数据
+     *
      * @param user
      */
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     @Insert("insert into user (openid, create_time, name) values (#{openid}, #{createTime} , #{name})")
     void insert(User user);
+
+    /**
+     * 根据id查询用户
+     *
+     * @param userId
+     * @return
+     */
+    @Select("select * from user where id = #{userId}")
+    User getById(Long userId);
 }

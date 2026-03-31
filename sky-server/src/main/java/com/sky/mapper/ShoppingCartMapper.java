@@ -47,4 +47,9 @@ public interface ShoppingCartMapper {
      * 根据套餐id和用户id删除购物车数据
      */
     void deleteBySetmealIdAndUserId(Long setmealId, Long userId);
+
+    /**
+     * 根据用户id查询购物车数据
+     */
+    List<ShoppingCart> listByUserId(Long userId);
 }

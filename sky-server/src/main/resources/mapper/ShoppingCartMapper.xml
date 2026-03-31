@@ -25,6 +25,7 @@
     <!--查询当前用户的购物车数据-->
     <select id="list" resultType="com.sky.entity.ShoppingCart">SELECT * FROM shopping_cart WHERE user_id = #{userId}</select>
 
+
     <!--清空当前用户的购物车数据-->
     <delete id="deleteByUserId">DELETE FROM shopping_cart WHERE user_id = #{userId}</delete>
 
@@ -33,4 +34,10 @@
 
     <!--根据套餐id和用户id删除购物车数据-->
     <delete id="deleteBySetmealIdAndUserId">DELETE FROM shopping_cart WHERE user_id = #{userId} AND setmeal_id = #{setmealId}</delete>
+
+    <!--查询当前用户的购物车数据 -订单用-->
+    <select id="listByUserId" resultType="com.sky.entity.ShoppingCart">
+        SELECT  name, image,  dish_id, setmeal_id, dish_flavor, number, amount
+            FROM shopping_cart WHERE user_id = #{userId}
+    </select>
 </mapper>
