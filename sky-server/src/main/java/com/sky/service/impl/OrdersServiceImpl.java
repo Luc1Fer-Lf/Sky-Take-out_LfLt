@@ -322,5 +322,37 @@ public class OrdersServiceImpl implements OrdersService {
         ordersMapper.updateStatus(ordersConfirmDTO.getId(), Orders.CONFIRMED);
     }
 
+    /**
+     * 拒单
+     * @param ordersRejectDTO
+     */
+    @Override
+    public void reject(OrdersRejectionDTO ordersRejectDTO) {
+        log.info("拒单：{}", ordersRejectDTO);
+        //1、只有订单处于“待接单”状态时可以执行拒单操作
+        Orders ordersDB = ordersMapper.getById(ordersRejectDTO.getId());
+        if (!ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        //3、商家拒单时，如果用户已经完成了支付，需要为用户退款
+        if (ordersDB.getPayStatus().equals(Orders.PAID)) {
+            // 调用微信支付接口退款
+            //因为没有商家用户所以不能进行退款操作，直接将状态调为已退款，来模拟退款
+            ordersDB.setPayStatus(Orders.REFUND); // 直接将状态调为已退款，来模拟退款
+        }
+        //2、商家拒单时需要指定拒单原因
+        if (ordersRejectDTO.getRejectionReason() == null || ordersRejectDTO.getRejectionReason().trim().length() == 0) {
+            throw new OrderBusinessException(MessageConstant.ORDER_REJECT_REASON_NOT_NULL);
+        }
+        ordersMapper.update(Orders.builder()
+                .id(ordersDB.getId())
+                .status(Orders.CANCELLED)
+                .rejectionReason(ordersRejectDTO.getRejectionReason())
+                .cancelReason("商家拒单")
+                .cancelTime(LocalDateTime.now())
+                .build());
+        log.info("拒单成功：{}", ordersDB);
+    }
+
 
 }
