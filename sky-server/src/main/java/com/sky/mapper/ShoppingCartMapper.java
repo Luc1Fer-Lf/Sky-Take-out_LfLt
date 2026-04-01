@@ -52,4 +52,9 @@ public interface ShoppingCartMapper {
      * 根据用户id查询购物车数据
      */
     List<ShoppingCart> listByUserId(Long userId);
+
+    /**
+     * 批量插入购物车数据
+     */
+    void insertBatch(List<ShoppingCart> shoppingCartList);
 }

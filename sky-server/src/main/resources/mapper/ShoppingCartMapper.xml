@@ -40,4 +40,13 @@
         SELECT  name, image,  dish_id, setmeal_id, dish_flavor, number, amount
             FROM shopping_cart WHERE user_id = #{userId}
     </select>
+
+    <!--批量插入购物车数据-->
+    <insert id="insertBatch">
+        INSERT INTO shopping_cart (name , user_id, dish_id, setmeal_id, dish_flavor, image , number, amount, create_time)
+        VALUES
+        <foreach collection="shoppingCartList" item="item" separator=",">
+            (#{item.name} , #{item.userId}, #{item.dishId}, #{item.setmealId}, #{item.dishFlavor} , #{item.image} , #{item.number}, #{item.amount}, #{item.createTime})
+        </foreach>
+    </insert>
 </mapper>
