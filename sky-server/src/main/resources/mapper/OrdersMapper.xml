@@ -49,4 +49,15 @@
 
     <!--根据id查询订单-->
     <select id="getById" resultType="com.sky.entity.Orders">select * from orders where id = #{id}</select>
+
+    <!--条件分页查询-->
+    <select id="pageQuery" resultType="com.sky.entity.Orders">
+        select * from orders where 1=1
+        <if test="status != null"> and status = #{status}</if>
+        <if test="phone != null and phone != ''"> and phone like '%${phone}%'</if>
+        <if test="number != null and number != ''"> and number like '%${number}%'</if>
+        <if test="beginTime != null"> and order_time &gt;= #{beginTime}</if>
+        <if test="endTime != null"> and order_time &lt;= #{endTime}</if>
+        order by order_time desc
+    </select>
 </mapper>

@@ -259,4 +259,44 @@ public class OrdersServiceImpl implements OrdersService {
         }
         shoppingCartMapper.insertBatch(shoppingCartList);
     }
+
+    /**
+     * 订单搜索
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(OrdersPageQueryDTO ordersPageQueryDTO) {
+        //1、设置分页参数
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        //2、执行分页查询
+        Page<Orders> page = ordersMapper.pageQuery(ordersPageQueryDTO);
+        List<OrderVO> orderVOList = new ArrayList<>();
+        for (Orders orders : page) {
+            OrderVO orderVO = new OrderVO();
+            BeanUtils.copyProperties(orders, orderVO);
+            //查询订单明细
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orders.getId());
+            orderVO.setOrderDetailList(orderDetailList);
+            orderVOList.add(orderVO);
+
+        }
+        //3、根据订单ID查询菜品名称和数量并拼接成字符串返回
+        orderVOList.forEach(orderVO -> orderVO.setOrderDishes(getOrderDishes(orderVO.getOrderDetailList())));
+        //4、返回结果
+        return new PageResult(page.getTotal(), orderVOList);
+    }
+    /**
+     * 获取订单菜品信息
+     * @param orderDetailList
+     * @return
+     */
+    private String getOrderDishes(List<OrderDetail> orderDetailList) {
+        StringBuilder orderDishes = new StringBuilder();
+        for (OrderDetail orderDetail : orderDetailList) {
+            orderDishes.append(orderDetail.getDishFlavor() + " " + orderDetail.getName() + "*" + orderDetail.getNumber() + "份 , ");
+        }
+        return orderDishes.toString().substring(0, orderDishes.length() - 1);
+    }
+
 }
