@@ -45,4 +45,11 @@ public interface OrdersMapper {
      * @return
      */
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 待接单数量
+     * @param status
+     * @return
+     */
+    Integer countByStatus(Integer status);
 }
