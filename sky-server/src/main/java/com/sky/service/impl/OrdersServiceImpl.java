@@ -397,5 +397,17 @@ public class OrdersServiceImpl implements OrdersService {
         ordersMapper.updateStatus(id, Orders.DELIVERY_IN_PROGRESS);
     }
 
+    /**
+     * 完成订单
+     * @param id
+     */
+    @Override
+    public void complete(Long id) {
+        log.info("完成订单：{}", id);
+        //1、补充送达时间
+        ordersMapper.update(Orders.builder().id(id).status(Orders.COMPLETED).deliveryTime(LocalDateTime.now()).build());
+        log.info("订单完成：{}", id);
+    }
+
 
 }
