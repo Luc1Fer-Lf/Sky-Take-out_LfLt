@@ -66,4 +66,8 @@
         select count(id) from orders where status = #{status}
     </select>
 
+    <!--更新订单状态-->
+    <update id="updateStatus">
+        update orders set status = #{status} where id = #{id}
+    </update>
 </mapper>

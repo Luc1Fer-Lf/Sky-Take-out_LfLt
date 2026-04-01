@@ -52,4 +52,11 @@ public interface OrdersMapper {
      * @return
      */
     Integer countByStatus(Integer status);
+
+    /**
+     * 接单
+     * @param id
+     * @param status
+     */
+    void updateStatus(Long id, Integer status);
 }
