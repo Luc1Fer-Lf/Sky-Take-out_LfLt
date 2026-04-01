@@ -97,4 +97,16 @@ public class OrdersController {
         ordersService.adminCancel(ordersCancelDTO);
         return Result.success();
     }
+
+    /**
+     * 派送订单
+     * @param id
+     */
+    @ApiOperation("派送订单")
+    @PutMapping("/delivery/{id}")
+    public Result delivery(@PathVariable Long id) {
+        log.info("派送订单：{}", id);
+        ordersService.delivery(id);
+        return Result.success();
+    }
 }

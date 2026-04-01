@@ -387,5 +387,15 @@ public class OrdersServiceImpl implements OrdersService {
                 .build());
     }
 
+    /**
+     * 派送订单
+     * @param id
+     */
+    @Override
+    public void delivery(Long id) {
+        log.info("派送订单：{}", id);
+        ordersMapper.updateStatus(id, Orders.DELIVERY_IN_PROGRESS);
+    }
+
 
 }
