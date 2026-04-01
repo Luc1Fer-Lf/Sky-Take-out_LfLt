@@ -338,7 +338,10 @@ public class OrdersServiceImpl implements OrdersService {
         if (ordersDB.getPayStatus().equals(Orders.PAID)) {
             // 调用微信支付接口退款
             //因为没有商家用户所以不能进行退款操作，直接将状态调为已退款，来模拟退款
-            ordersDB.setPayStatus(Orders.REFUND); // 直接将状态调为已退款，来模拟退款
+            ordersMapper.update(Orders.builder()
+                    .id(ordersDB.getId())
+                    .status(Orders.REFUND)
+                    .build());
         }
         //2、商家拒单时需要指定拒单原因
         if (ordersRejectDTO.getRejectionReason() == null || ordersRejectDTO.getRejectionReason().trim().length() == 0) {
@@ -352,6 +355,36 @@ public class OrdersServiceImpl implements OrdersService {
                 .cancelTime(LocalDateTime.now())
                 .build());
         log.info("拒单成功：{}", ordersDB);
+    }
+
+    /**
+     * 管理员取消订单
+     * @param ordersCancelDTO
+     */
+    @Override
+    public void adminCancel(OrdersCancelDTO ordersCancelDTO) {
+        //1、商家取消订单时需要指定取消原因
+        if (ordersCancelDTO.getCancelReason() == null || ordersCancelDTO.getCancelReason().trim().length() == 0) {
+            throw new OrderBusinessException(MessageConstant.ORDER_CANCEL_REASON_NOT_NULL);
+        }
+        //2、商家取消订单时，如果用户已经完成了支付，需要为用户退款
+        Orders ordersDB = ordersMapper.getById(ordersCancelDTO.getId());
+        if (ordersDB.getPayStatus().equals(Orders.PAID)) {
+            //调用微信支付接口退款
+            //因为没有商家用户所以不能进行退款操作，直接将状态调为已退款，来模拟退款
+            ordersMapper.update(Orders.builder()
+                    .id(ordersCancelDTO.getId())
+                    .status(Orders.REFUND) // 直接将状态调为已退款，来模拟退款
+                    .build());
+        }
+        //3、更新订单状态、取消原因、取消时间
+        log.info("管理员取消订单：{}", ordersCancelDTO);
+        ordersMapper.update(Orders.builder()
+                .id(ordersCancelDTO.getId())
+                .status(Orders.CANCELLED)
+                .cancelReason(ordersCancelDTO.getCancelReason())
+                .cancelTime(LocalDateTime.now())
+                .build());
     }
 
 
