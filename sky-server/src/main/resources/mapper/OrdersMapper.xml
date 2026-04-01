@@ -26,4 +26,25 @@
         where id = #{id}
     </update>
 
+    <!--根据订单号查询订单-->
+    <select id="pageQueryByUser" resultType="com.sky.entity.Orders">
+        select * from orders where user_id = #{userId}
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="phone != null and phone != ''">
+            and phone like '%${phone}%'
+        </if>
+        <if test="number != null and number != ''">
+            and number like '%${number}%'
+        </if>
+        <if test="beginTime != null">
+            and order_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and order_time &lt;= #{endTime}
+        </if>
+        order by order_time desc
+    </select>
+
 </mapper>

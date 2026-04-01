@@ -8,4 +8,7 @@
             (#{orderDetail.name},#{orderDetail.image},#{orderDetail.orderId},#{orderDetail.dishId},#{orderDetail.setmealId},#{orderDetail.dishFlavor},#{orderDetail.number},#{orderDetail.amount})
         </foreach>
     </insert>
+
+    <!--查询订单详情-->
+    <select id="getByOrderId" resultType="com.sky.entity.OrderDetail">select * from order_detail where order_id = #{orderId}</select>
 </mapper>
