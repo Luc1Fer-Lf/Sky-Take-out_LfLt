@@ -47,7 +47,7 @@ public interface OrdersMapper {
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
     /**
-     * 待接单数量
+     * 统计各订单状态数量
      * @param status
      * @return
      */

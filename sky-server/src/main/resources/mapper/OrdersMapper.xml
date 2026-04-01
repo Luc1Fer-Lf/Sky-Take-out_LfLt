@@ -61,9 +61,9 @@
         order by order_time desc
     </select>
 
-     <!--统计待接单状态的订单数量-->
+     <!--统计各个状态的订单数量-->
     <select id="countByStatus" resultType="java.lang.Integer">
         select count(id) from orders where status = #{status}
-
     </select>
+
 </mapper>
