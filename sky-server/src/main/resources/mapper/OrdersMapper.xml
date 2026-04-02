@@ -29,21 +29,11 @@
     <!--根据订单号查询订单-->
     <select id="pageQueryByUser" resultType="com.sky.entity.Orders">
         select * from orders where user_id = #{userId}
-        <if test="status != null">
-            and status = #{status}
-        </if>
-        <if test="phone != null and phone != ''">
-            and phone like '%${phone}%'
-        </if>
-        <if test="number != null and number != ''">
-            and number like '%${number}%'
-        </if>
-        <if test="beginTime != null">
-            and order_time >= #{beginTime}
-        </if>
-        <if test="endTime != null">
-            and order_time &lt;= #{endTime}
-        </if>
+        <if test="status != null">and status = #{status}</if>
+        <if test="phone != null and phone != ''">and phone like '%${phone}%'</if>
+        <if test="number != null and number != ''">and number like '%${number}%'</if>
+        <if test="beginTime != null">and order_time >= #{beginTime}</if>
+        <if test="endTime != null">and order_time &lt;= #{endTime}</if>
         order by order_time desc
     </select>
 
@@ -62,12 +52,14 @@
     </select>
 
      <!--统计各个状态的订单数量-->
-    <select id="countByStatus" resultType="java.lang.Integer">
-        select count(id) from orders where status = #{status}
-    </select>
+    <select id="countByStatus" resultType="java.lang.Integer">select count(id) from orders where status = #{status}</select>
 
     <!--更新订单状态-->
-    <update id="updateStatus">
-        update orders set status = #{status} where id = #{id}
-    </update>
+    <update id="updateStatus">update orders set status = #{status} where id = #{id}</update>
+
+    <!--查询超时订单-->
+    <select id="selectOutOfTimeOrders" resultType="com.sky.entity.Orders">select * from orders where status = #{status} and order_time &lt; #{orderTime}</select>
+
+    <!--查询超时未派送订单-->
+    <select id="selectOutOfTimeOrdersAtOne" resultType="com.sky.entity.Orders">select * from orders where status = #{status} and order_time &lt; #{deliveryTime}</select>
 </mapper>

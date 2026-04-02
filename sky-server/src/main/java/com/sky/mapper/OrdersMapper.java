@@ -6,6 +6,9 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface OrdersMapper {
     //插入订单数据
@@ -59,4 +62,16 @@ public interface OrdersMapper {
      * @param status
      */
     void updateStatus(Long id, Integer status);
+
+    /**
+     *处理超时订单
+     * @return
+     */
+    List<Orders> selectOutOfTimeOrders(Integer status, LocalDateTime orderTime);
+
+    /**
+     *在一点时集中处理未派送订单
+     * @return
+     */
+    List<Orders> selectOutOfTimeOrdersAtOne(Integer status, LocalDateTime deliveryTime);
 }
