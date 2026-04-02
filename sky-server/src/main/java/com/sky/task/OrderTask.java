@@ -44,7 +44,7 @@ public class OrderTask {
     /**
      * 每天凌晨一点：处理处于待派送状态的订单,如果存在，则修改为已完成，将订单状态改为5
      */
-    @Scheduled(cron = "0 29 17 * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void processPendingDeliveryOrder() {
         log.info("处理处于待派送状态的订单");
         //1、查询数据库中的Orders表  条件 订单状态为4，下单时间小于当前时间减2 小时
