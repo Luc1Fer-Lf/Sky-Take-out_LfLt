@@ -16,6 +16,7 @@ import com.sky.service.OrdersService;
 import com.sky.utils.HttpClientUtil;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.*;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class OrdersServiceImpl implements OrdersService {
     private OrderDetailMapper orderDetailMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
     @Value("${sky.shop.address}")
     private String shopAddress;
     @Value("${sky.baidu.ak}")
@@ -170,6 +173,14 @@ public class OrdersServiceImpl implements OrdersService {
                 .build();
 
         ordersMapper.update(orders);
+        //通过websocket 推送消息给客户端
+        Map map = new HashMap();
+        map.put("type", 1);//1、表示来单提醒  2、表示用户催单
+        map.put("orderId", ordersDB.getId());//订单id
+        map.put("content", "订单号：" + ordersDB.getNumber());// 内容
+        String json = JSON.toJSONString(map);//转为json
+        webSocketServer.sendToAllClient(json);//推送消息给客户端
+
     }
 
     /**
