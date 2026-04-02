@@ -435,6 +435,26 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     /**
+     * 催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        log.info("催单：{}", id);
+        //获取订单信息
+        Orders orders = ordersMapper.getById(id);
+        if (orders == null || orders.getStatus() > Orders.DELIVERY_IN_PROGRESS) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Map map = new HashMap<>();
+        map.put("type", 2);//1、表示来单提醒  2、表示用户催单
+        map.put("orderId", orders.getId());//订单id
+        map.put("content", "订单号：" + orders.getNumber());// 内容
+        String json = JSON.toJSONString(map);//转为json
+        webSocketServer.sendToAllClient(json);//推送消息给客户端
+    }
+
+    /**
      * 检查客户的收货地址是否超出配送范围
      * @param address 用户收货地址
      */
