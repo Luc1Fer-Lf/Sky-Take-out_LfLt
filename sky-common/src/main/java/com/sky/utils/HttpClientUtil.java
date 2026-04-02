@@ -28,18 +28,18 @@ public class HttpClientUtil {
     static final  int TIMEOUT_MSEC = 5 * 1000;
 
     /**
-     * 发送GET方式请求
+     * 发送 GET 方式请求
      * @param url
      * @param paramMap
      * @return
      */
     public static String doGet(String url,Map<String,String> paramMap){
-        // 创建Httpclient对象
+        // 创建 Httpclient 对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
-
+    
         String result = "";
         CloseableHttpResponse response = null;
-
+    
         try{
             URIBuilder builder = new URIBuilder(url);
             if(paramMap != null){
@@ -51,7 +51,7 @@ public class HttpClientUtil {
 
             //创建GET请求
             HttpGet httpGet = new HttpGet(uri);
-
+    
             //发送请求
             response = httpClient.execute(httpGet);
 
@@ -69,7 +69,7 @@ public class HttpClientUtil {
                 e.printStackTrace();
             }
         }
-
+    
         return result;
     }
 

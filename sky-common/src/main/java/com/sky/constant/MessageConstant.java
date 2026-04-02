@@ -26,4 +26,5 @@ public class MessageConstant {
     public static final String USERNAME_IS_EXIST = "用户名已存在";
     public static final String ORDER_REJECT_REASON_NOT_NULL = "拒单理由不能为空";
     public static final String ORDER_CANCEL_REASON_NOT_NULL = "取消理由不能为空";
+    public static final String OUT_OF_RANGE = "超出配送范围";
 }

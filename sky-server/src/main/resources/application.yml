@@ -63,7 +63,12 @@ sky:
     access-key-id: ${sky.alioss.access-key-id}
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
-
+#百度地图配置
+  shop:
+    address: ${sky.shop.address}
+    # 百度地图配置
+  baidu:
+     ak: ${sky.baidu.ak}
     #微信相关
   wechat :
     appid: ${sky.wechat.appid}
