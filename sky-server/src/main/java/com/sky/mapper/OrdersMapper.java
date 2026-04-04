@@ -3,11 +3,14 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrdersMapper {
@@ -74,4 +77,53 @@ public interface OrdersMapper {
      * @return
      */
     List<Orders> selectOutOfTimeOrdersAtOne(Integer status, LocalDateTime deliveryTime);
+
+    /**
+     * 统计金额
+     * @param confirmed
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    Double sumByStatusAndOrderTime(Integer status, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计当日新增用户数
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    Integer countByCreateTime(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计截止时间的总人数
+     * @param endTime
+     * @return
+     */
+    Integer countSumByCreateTime(LocalDateTime endTime);
+
+    /**
+     * 统计每日订单数
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    Integer sumOrderCountByOrderTime(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计每日订单数
+     * @param beginTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    Integer sumValidOrderCountByOrderTime(Integer status, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计销量排名top10
+     * @param map
+     * @return
+     */
+    @MapKey("name")
+    List<Map> sumTop10(Map map);
 }

@@ -62,4 +62,30 @@
 
     <!--查询超时未派送订单-->
     <select id="selectOutOfTimeOrdersAtOne" resultType="com.sky.entity.Orders">select * from orders where status = #{status} and order_time &lt; #{deliveryTime}</select>
+
+    <!--统计订单金额-->
+    <select id="sumByStatusAndOrderTime" resultType="java.lang.Double">
+        select sum(amount) from orders where status = #{status} and order_time &gt;= #{beginTime} and order_time &lt;= #{endTime}
+    </select>
+
+    <!--统计新用户数量-->
+    <select id="countByCreateTime" resultType="java.lang.Integer">select count(id) from user where create_time &gt;= #{beginTime} and create_time &lt;= #{endTime}</select>
+
+    <!--统计总用户数量-->
+    <select id="countSumByCreateTime" resultType="java.lang.Integer">select count(id) from user where create_time &lt;= #{endTime}</select>
+
+    <!--统计每日订单数量-->
+    <select id="sumOrderCountByOrderTime" resultType="java.lang.Integer">select count(id) from orders where order_time &gt;= #{beginTime} and order_time &lt;= #{endTime}</select>
+
+    <!--统计每日有效订单数量-->
+    <select id="sumValidOrderCountByOrderTime" resultType="java.lang.Integer">select count(id) from orders where status = #{status} and order_time &gt;= #{beginTime} and order_time &lt;= #{endTime}</select>
+
+    <!--统计销量排名top10-->
+    <select id="sumTop10" resultType="java.util.Map">
+        select od.name , sum(od.number) as sumNum from orders o , order_detail od
+               where o.id = od.order_id and o.status = #{status} and
+                     o.order_time &gt;= #{begin} and o.order_time &lt;= #{end}
+        group by od.name
+        order by sumNum desc limit 0,10
+    </select>
 </mapper>
