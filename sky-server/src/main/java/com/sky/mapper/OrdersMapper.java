@@ -126,4 +126,18 @@ public interface OrdersMapper {
      */
     @MapKey("name")
     List<Map> sumTop10(Map map);
+
+    /**
+     * 工作台统计每日数据
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
+
+    /**
+     * 工作台统计营业额数据
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
 }

@@ -57,8 +57,7 @@
         </where>
     </select>
 
-
-<!--根据id查询菜品数据-->
+    <!--根据id查询菜品数据-->
     <select id="listById" resultType="com.sky.entity.Dish">
         SELECT * FROM dish
         <where >
@@ -67,4 +66,12 @@
         </where>
     </select>
 
+    <!---->
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from dish
+        <where>
+            <if test="status != null"> and status = #{status} </if>
+            <if test="categoryId != null"> and category_id = #{categoryId} </if>
+        </where>
+    </select>
 </mapper>

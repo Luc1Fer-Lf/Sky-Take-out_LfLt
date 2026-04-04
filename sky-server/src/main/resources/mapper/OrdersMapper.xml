@@ -88,4 +88,17 @@
         group by od.name
         order by sumNum desc limit 0,10
     </select>
+
+    <!--工作台统计指定时间区间内订单数量-->
+    <select id="countByMap" resultType="java.lang.Integer">
+      select count(id) from orders
+        <where>
+            <if test="beginTime != null">and order_time &gt;= #{beginTime}</if>
+            <if test="endTime != null">and order_time &lt;= #{endTime}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
+
+    <!--工作台统计指定时间区间内订单金额-->
+    <select id="sumByMap" resultType="java.lang.Double">select sum(amount) from orders where order_time &gt;= #{beginTime} and order_time &lt;= #{endTime} and status = #{status}</select>
 </mapper>
